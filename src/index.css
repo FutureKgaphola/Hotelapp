@@ -11,3 +11,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.grid-container{
+  display: grid;
+  grid-template-columns:15% 85%;
+  grid-template-rows: repeat(4,minmax(150px,auto));
+}
+.animals{
+  grid-column-start: 3;
+  grid-row-start: 2;
+}
+
+#footer{
+  color: aliceblue;
+  padding: 5px;
+}
+#footer a{
+  color: aliceblue;
+  text-decoration: none;
+}
+#footer .col{
+  display:flex;
+  list-style:none;
+  flex-direction:column;
+}
