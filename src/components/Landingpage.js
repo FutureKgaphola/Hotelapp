@@ -5,9 +5,58 @@ import companyimage from '../media/hotel.png';
 import hiking from '../media/hihing.jpg';
 import mountain from '../media/mountaineer.png';
 import lemuer from '../media/lemur.png';
+import {onSnapshot,collection,} from "firebase/firestore";
 import { Link } from 'react-router-dom';
+import {db} from '../Dbconfig/db';
+import { useEffect, useState } from 'react';
+import NavBar from './Navbar';
+import { signInWithEmailAndPassword,getAuth } from "firebase/auth";
+
 
 const Landingpage = () => {
+    const colRef=collection(db,"Rooms");
+    var [chalets,setchalet]=useState([]);
+    const [password,setpassword]=useState('');
+    var [email,setEmail]=useState('');
+    let rooms=[];
+
+    useEffect(()=>{
+        onSnapshot(colRef,(snapshot)=>{
+            snapshot?.docs.forEach((doc) => {
+                rooms.push(
+                    {
+                        id:doc.id,
+                        ...doc.data()
+                    }
+                );
+                setchalet(rooms);
+            });
+        })
+
+    },[chalets,colRef])
+    
+    var onLogin=(event)=>{
+        event.preventDefault();
+        const auth=getAuth();
+        if(String(email)!=="" && String(password)!=="")
+        {
+            console.log(email);
+            console.log(password);
+            signInWithEmailAndPassword(auth,email,password).then((res)=>
+            {
+                event.target.innerHTML="welcome, "+res.user.email;
+                event.target.disabled=true;
+                //console.log(res.user.uid);
+                setTimeout(() => {
+                    event.target.disabled=false;
+                    event.target.innerHTML="Login";
+                }, 2000);
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }
+
+    }
     
      var submitfields=(event)=>{
         event.preventDefault();
@@ -23,43 +72,12 @@ const Landingpage = () => {
         }
      }
 
-    const rooms=[
-        {
-            "id":1,
-            "roomtype":"Single"
-        },
-        {
-            "id":2,
-            "roomtype":"Double"
-        },
-        {
-            "id":3,
-            "roomtype":"Family"
-        },
-        {
-            "id":4,
-            "roomtype":"Family"
-        }
-        
-        ];
+    
         
 
     return ( 
         <div className="container" style={{backgroundColor:'white',height:'100%'}}>
-            <div className="row" style={{height:'10%'}}>
-                <div className="col" style={{textAlign:'left'}}>
-                    <img src={companyimage}
-                    alt='..'
-                    width={"65px"}
-                    height={"65px"}/>
-                </div>
-                
-                <div className="col" style={{textAlign:'right'}}>
-                    <button style={{borderRadius:'9px',margin:'5px',borderColor:'black',color:'black'}} type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" className="btn btn-sm">sign in</button>
-                    <button style={{borderRadius:'9px',margin:'5px',backgroundColor:'#306832',color:'white'}} type="button" className="btn btn-sm">sign up</button>
-                </div>
-            </div>
-
+            <NavBar/>
             <div className="row" style={{
                 backgroundImage: `url(${bedimage})`,
                 backgroundSize:'cover',
@@ -110,7 +128,8 @@ const Landingpage = () => {
             <div className="container row">
                 
                 {
-                    rooms.map((item)=>(
+                    chalets.map((item)=>(
+                    
                         <div key={item.id} className="card" style={{width:'15rem',
                                 height:'18rem',
                                 zIndex:'2',
@@ -126,17 +145,17 @@ const Landingpage = () => {
                                         <p style={{color:'white'}}>1x bed</p>
                                         <p style={{color:'white'}}>1x bathroom</p>
                                         <div style={{display:'block',textAlign:'end'}}>
-                                            <button style={{borderRadius:'9px',margin:'5px',width:'65px', backgroundColor:'white',borderColor:'black',color:'black'}} type="button" className="btn btn-sm">explore</button>
+                                            <button style={{borderRadius:'9px',margin:'5px',width:'65px', backgroundColor:'white',borderColor:'black',color:'black'}} type="button" className="explore btn btn-sm">explore</button>
                                         </div>
                                         
                                     </div> 
 
                             </div>
                     ))
+                    
                 }
                 
                 
-
             </div>
 
             <div className="row">
@@ -270,7 +289,7 @@ const Landingpage = () => {
                     <form onSubmit={(formfields)=>{submitfields(formfields)}}>
                         <div className="form-outline mb-4">
                         <input 
-                        
+                        onChange={(e)=>setEmail(e.target.value)}
                         type="email"
                         required
                         name="editemail"
@@ -280,7 +299,7 @@ const Landingpage = () => {
                         
                         <div className="form-outline mb-4">
                         <input
-                        
+                        onChange={(e)=>setpassword(e.target.value)}
                         type="password"
                         required
                         name="editpass"
@@ -289,7 +308,8 @@ const Landingpage = () => {
                         </div>
                         
                         <div className="pt-1 mb-4">
-                            <button style={{borderRadius:'9px',margin:'5px',backgroundColor:'#306832',color:'white'}} type="button" className="btn btn-lg">Login</button>
+                            <button onClick={(e)=>onLogin(e)}
+                             style={{borderRadius:'9px',margin:'5px',backgroundColor:'#306832',color:'white'}} type="button" className="btn btn-lg">Login</button>
                         </div>
                         <button 
                         className="small text-muted" type='submit' style={{border:'none',backgroundColor:'white'}}>Forgot password?</button>

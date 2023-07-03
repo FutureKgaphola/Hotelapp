@@ -35,3 +35,18 @@ code {
   list-style:none;
   flex-direction:column;
 }
+button{
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 3px #999;
+}
+button:hover {background-color: #3e8e41}
+
+button:active {
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
