@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { db } from '../Dbconfig/db';
 import { useEffect, useState } from 'react';
 import NavBar, { onLogin } from './Navbar';
+import Skeleton from './skeleton';
 
 
 const Landingpage = () => {
@@ -17,11 +18,13 @@ const Landingpage = () => {
     var [chalets, setchalet] = useState([]);
     const [password, setpassword] = useState('');
     var [email, setEmail] = useState('');
+    var [isLoading,setisLoading]=useState(true);
 
 
     useEffect(() => {
         let rooms = [];
         onSnapshot(colRef, (snapshot) => {
+            rooms = [];
             snapshot?.docs.forEach((doc) => {
                 rooms.push(
                     {
@@ -30,6 +33,7 @@ const Landingpage = () => {
                     }
                 );
                 setchalet(rooms);
+                setisLoading(false);
             });
         })
 
@@ -91,53 +95,56 @@ const Landingpage = () => {
             </div>
 
 
-            <div className="row">
+            <div className="row" style={{display:'inline-block',padding:'5px'}}>
                 <h2 style={{
+                    
                     color: 'black',
                     fontFamily: 'fantasy',
                     textDecoration: 'underline',
                     textDecorationColor: '#306832'
                 }}
                 >HOTELS</h2>
+                <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
 
             </div>
 
             <div className="container row">
-
+            
                 {
+                    !isLoading &&
+                    
+                    chalets ?
                     chalets.map((item) => (
 
-                        <div key={item.id} className="card" style={{
-                            width: '15rem',
-                            height: '18rem',
-                            zIndex: '2',
-                            margin: '8px',
-                            boxShadow: '-5px -7px 3px #306832',
-                            backgroundImage: `url(${bedmath})`,
-                            backgroundSize: 'cover',
-                            backgroundRepeat: 'no-repeat'
-                        }}>
+                        <div key={item.id} className="col col-lg-3" style={{display:'flex',margin:'5px',padding:'0',borderRadius:"0px 5px 5px 0px", backgroundColor:'#306832'}}>
+                            <div className="col" style={{margin:'5px'}}>
+                            <div className="card-body">
+                            <strong style={{ backgroundColor: 'white', padding: '5px', borderRadius: '5px' }}><span style={{ color: '#306832', fontStyle: 'italic', fontSize: '20px' }}>{item.roomtype}</span></strong>
+                            <div style={{background: 'rgba(51, 49, 49, 0.46)',borderRadius:'5px',padding:'5px'}}>
+                                <ul>
+                                    <li style={{color:'white'}} >2 x beds</li>
+                                    <li style={{color:'white'}} >1 x shower</li>
+                                    <li style={{color:'white'}} >3 x sheets</li>
+                                </ul>
 
-                            <div className="card" style={{ display: 'inline', background: 'rgba(51, 49, 49, 0.46)', marginTop: '30%', }}>
-                                <span style={{ color: '#306832', fontFamily: 'cursive', fontSize: "25px" }}>{item.roomtype} </span>
-                                <span style={{ color: 'white', fontStyle: 'italic', fontSize: '20px' }}>Chalet</span>
-                                <p style={{ color: 'white' }}>1x bed</p>
-                                <p style={{ color: 'white' }}>1x bathroom</p>
-                                <div style={{ display: 'block', textAlign: 'end' }}>
-                                    <button style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</button>
-                                </div>
-
+                            </div>
+                                
+                                <button style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</button>
+                            </div>
+                            </div>
+                            <div className="col">
+                            <img style={{width:'100%',objectFit:'cover',height:"100%",borderRadius:"0px 5px 5px 0px"}} src={bedmath} alt="Card cap"/>
                             </div>
 
                         </div>
-                    ))
+                    )) : <Skeleton/>
 
                 }
 
 
             </div>
-
-            <div className="row">
+{/*
+<div className="row">
                 <div className='col-lg-1'>
                     <h2 style={{
                         color: 'black',
@@ -220,6 +227,9 @@ const Landingpage = () => {
 
 
             </div>
+
+            */}
+            
 
 
             <div id='footer' className='row' style={{ backgroundColor: '#306832', marginTop: '10px' }}>
