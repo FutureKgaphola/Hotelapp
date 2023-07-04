@@ -1,11 +1,12 @@
 
 import './App.css';
 import { Route,createBrowserRouter,createRoutesFromElements,RouterProvider } from 'react-router-dom';
-import ParentLayout from './components/ParentLayout';
-import Landingpage from './components/Landingpage';
-import ForgotPassword from './components/ForgotPassword';
-import Signup from './components/Signup';
-import Comp404 from './components/Comp404';
+import { lazy } from 'react';
+const ParentLayout=lazy(()=>import('./components/ParentLayout'));
+const Landingpage=lazy(()=>import('./components/Landingpage'));
+const ForgotPassword=lazy(()=>import('./components/ForgotPassword'));
+const Signup=lazy(()=>import('./components/Signup'));
+const Comp404=lazy(()=>import('./components/Comp404'));
 
 const router=createBrowserRouter(
   createRoutesFromElements(
