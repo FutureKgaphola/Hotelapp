@@ -1,19 +1,21 @@
 
 import './App.css';
 import { Route,createBrowserRouter,createRoutesFromElements,RouterProvider } from 'react-router-dom';
-import { lazy } from 'react';
-const ParentLayout=lazy(()=>import('./components/ParentLayout'));
-const Landingpage=lazy(()=>import('./components/Landingpage'));
-const ForgotPassword=lazy(()=>import('./components/ForgotPassword'));
-const Signup=lazy(()=>import('./components/Signup'));
-const Comp404=lazy(()=>import('./components/Comp404'));
+import ParentLayout from './components/ParentLayout';
+import Landingpage from './components/Landingpage';
+import ForgotPassword from './components/ForgotPassword';
+import Signup from './components/Signup';
+import Comp404 from './components/Comp404';
+import Register from './components/Register';
+import { Resetaction } from './Actions/Reset';
 
 const router=createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<ParentLayout/>}>
-      <Route path='/' element={<Landingpage/>}/>
+      <Route index element={<Landingpage/>}/>
       <Route path='Signup' element={<Signup/>}/>
-      <Route path='Forgtpassword' element={<ForgotPassword/>}/>
+      <Route path='Register' element={<Register/>}/>
+      <Route path='Forgtpassword' element={<ForgotPassword/>} action={Resetaction}/>
       <Route path='*' element={<Comp404/>}/>
     </Route>
   )

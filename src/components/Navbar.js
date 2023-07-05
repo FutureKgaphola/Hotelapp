@@ -4,18 +4,18 @@ import MoreButtons from './MoreButtons';
 import { signInWithEmailAndPassword,getAuth } from "firebase/auth";
 
 const auth=getAuth();
-export function onLogin(event,email,password){
+export function onLogin(event,email,password,setpassword,setEmail){
     event.preventDefault();
     
     if(String(email)!=="" && String(password)!=="")
     {
-        console.log(email);
-        console.log(password);
         signInWithEmailAndPassword(auth,email,password).then((res)=>
         {
             event.target.innerHTML="welcome, "+res.user.email;
             sessionStorage.setItem("auth_id", res.user.uid);
             event.target.disabled=true;
+            setpassword('');
+            setEmail('');
             
             setTimeout(() => {
                 event.target.disabled=false;
@@ -23,6 +23,10 @@ export function onLogin(event,email,password){
             }, 2000);
         }).catch((err)=>{
             console.log(err);
+            setpassword('');
+            sessionStorage.setItem("auth_id", "");
+            event.target.innerHTML=err;
+            
         });
     }
 }
@@ -30,6 +34,7 @@ export function onLogin(event,email,password){
 export function sign_out(){
     auth.signOut().catch((error)=>{
         console.log(error);
+        alert(error);
     });
 }
 
