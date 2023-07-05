@@ -1,15 +1,14 @@
-import LoginDialog from "./LoginDialog";
 import NavBar from "./Navbar";
 import Footer from "./footer";
 import companyimage from '../media/hotel.png';
 import bedmath from '../media/bedmath.jpg';
-import { Form, useActionData } from "react-router-dom";
+import LoginDialog from "./LoginDialog";
 
-const ForgotPassword = () => {
-    const dataError=useActionData();
-    return ( 
+const Register = () => {
+    return (
         <div className="container" style={{ backgroundColor: 'white', height: '100%' }}>
             <NavBar />
+
             <section className="">
                 <div className="container py-5 h-100">
                     <div className="row d-flex justify-content-center align-items-center h-100">
@@ -33,7 +32,7 @@ const ForgotPassword = () => {
 
                                             <h5 className="fw-normal mb-3 pb-3" style={{ letterSpacing: "1px" }}>Sign up for an account</h5>
 
-                                            <Form method="post" action="/Forgtpassword">{/*find the function associated with this route. here you must pass the route to this page*/}
+                                            <form >
                                                 <div className="form-outline mb-4">
                                                     <input
                                                         
@@ -45,13 +44,35 @@ const ForgotPassword = () => {
                                                     
                                                 </div>
 
-                                                <div className="pt-1 mb-4">
-                                                <button type='submit'
-                                            style={{ borderRadius: '9px',margin: '5px', backgroundColor: '#306832', color: 'white' }} className="btn btn-lg">Reset</button>
+                                                <div className="form-outline mb-4">
+                                                    <input
+                                                        
+                                                        type="password"
+                                                        required
+                                                        placeholder="Password"
+                                                        name="editpass"
+                                                        id="formpassword" className="form-control form-control-lg" />
+                                                    
                                                 </div>
-                                                {dataError && dataError.erroremail && <p>{dataError.erroremail}</p>}
 
-                                            </Form>
+                                                <div className="form-outline mb-4">
+                                                    <input
+                                                        
+                                                        type="tel"
+                                                        maxLength={10}
+                                                        required
+                                                        placeholder="+27"
+                                                        name="editphone"
+                                                        id="formphone" className="form-control form-control-lg" />
+                                                    
+                                                </div>
+
+                                                <div className="pt-1 mb-4">
+                                                <button 
+                                            style={{ borderRadius: '9px', margin: '5px', backgroundColor: '#306832', color: 'white' }} type="button" className="btn btn-lg">Register</button>
+                                                </div>
+
+                                            </form>
                                             
 
                                             
@@ -68,7 +89,7 @@ const ForgotPassword = () => {
             <Footer />
             <LoginDialog/>
         </div>
-     );
+    );
 }
- 
-export default ForgotPassword;
+
+export default Register;

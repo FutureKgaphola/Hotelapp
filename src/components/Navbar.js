@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import companyimage from '../media/hotel.png';
 import MoreButtons from './MoreButtons';
 import { signInWithEmailAndPassword,getAuth } from "firebase/auth";
@@ -42,8 +43,8 @@ auth.onAuthStateChanged(user=>{
 const NavBar = () => {
     
     return (
-        <div className="row" style={{ height: '10%' }}>
-            <div className="col" style={{ textAlign: 'left' }}>
+        <div className="row" style={{ height: '10%',backgroundColor:'whitesmoke' }}>
+            <div className="col" style={{ textAlign: 'left'}}>
                 <img src={companyimage}
                     alt='..'
                     width={"65px"}
@@ -53,7 +54,7 @@ const NavBar = () => {
             <div id='logindiv' className="col" style={{ textAlign: 'right' }}>
                 {sessionStorage.getItem("auth_id") && <MoreButtons/>}
                 <button style={{ borderRadius: '9px', margin: '5px', borderColor: 'black', color: 'black' }} type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" className="btn btn-sm">sign in</button>
-                <button style={{ borderRadius: '9px', margin: '5px', backgroundColor: '#306832', color: 'white' }} type="button" className="btn btn-sm">sign up</button>
+                <Link to={'/Register'} style={{ borderRadius: '9px', margin: '5px', backgroundColor: '#306832', color: 'white' }} type="button" className="btn btn-sm">sign up</Link>
             </div>
         </div>
     );
