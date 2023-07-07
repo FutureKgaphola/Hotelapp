@@ -2,23 +2,26 @@
 import bedimage from '../media/restbed.jpg';
 import bedmath from '../media/bedmath.jpg';
 import searchicon from '../media/search.png';
-import { onSnapshot, collection, } from "firebase/firestore";
+import { onSnapshot, collection } from "firebase/firestore";
 import { db } from '../Dbconfig/db';
 import { useEffect, useState } from 'react';
 import NavBar from './Navbar';
 import Skeleton from './skeleton';
 import Footer from './footer';
 import LoginDialog from './LoginDialog';
+import { handleDelete } from '../Handlers/Handles';
+import { getAuth } from "firebase/auth";
 
 
 const Landingpage = () => {
-    const colRef = collection(db, "Rooms");
+
     var [chalets, setchalet] = useState([]);
-    
+    var [isAdminEmail,setAuthEmail]=useState(null);
     var [isLoading, setisLoading] = useState(true);
     const [search, setsearch] = useState('');
 
     useEffect(() => {
+        const colRef = collection(db, "Rooms");
         let rooms = [];
         onSnapshot(colRef, (snapshot) => {
             rooms = [];
@@ -32,14 +35,28 @@ const Landingpage = () => {
                 setchalet(rooms);
                 setisLoading(false);
             });
+
+            const auth=getAuth();
+            
+            auth.onAuthStateChanged(user=>{
+                if(!user)
+                {
+                    setAuthEmail(null);
+                }else{
+                    setAuthEmail(user.email);
+                }
+            })
         })
 
-    }, [chalets, colRef])
+    }, [])
+
+    
 
 
     return (
         <div className="container" style={{ backgroundColor: 'white', height: '100%' }}>
             <NavBar />
+            
             <div className="row" style={{
                 backgroundImage: `url(${bedimage})`,
                 backgroundSize: 'cover',
@@ -88,10 +105,11 @@ const Landingpage = () => {
                 >HOTELS</h2>
                 <div style={{ display: 'flex', padding: '2px', backgroundColor: '#306832', borderRadius: '20px' }}>
                     <img src={searchicon} height={'25px'} style={{ marginLeft: '5px', alignSelf: 'center' }} alt="search" />
-                    <input style={{ marginLeft: '6px', margin: '18px' }} onChange={(e) => setsearch(e.target.value)} className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
+                    <input style={{ marginLeft: '6px', margin: '18px' }} value={search} onChange={(e) => setsearch(e.target.value)} className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
                 </div>
 
-
+                {isAdminEmail}
+                
             </div>
 
             <div className="container row">
@@ -114,10 +132,22 @@ const Landingpage = () => {
                                                 <li style={{ color: 'white' }} >1 x shower</li>
                                                 <li style={{ color: 'white' }} >3 x sheets</li>
                                             </ul>
-
                                         </div>
-
-                                        <button style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</button>
+                                        
+                                        {
+                                            isAdminEmail && (String(isAdminEmail)).toLowerCase()==="admin@marula.co.za" ? 
+                                            <div>
+                                                <button style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</button>
+                                            
+                                                <button style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'green' }} type="button" className="explore btn btn-sm">edit</button>
+                                            
+                                                <button onClick={() => handleDelete(item.id)} style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'red', borderColor: 'black', color: 'white' }} type="button" className="explore btn btn-sm">remove</button>
+                                            
+                                            </div>
+                                             
+                                        : <button style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</button>
+                                        }
+                                        
                                     </div>
                                 </div>
                                 <div className="col">
@@ -126,15 +156,13 @@ const Landingpage = () => {
 
                             </div>
                         )) : <Skeleton />
-
                 }
-
 
             </div>
 
-            <Footer/>
+            <Footer />
 
-            <LoginDialog/>
+            <LoginDialog />
 
         </div>
     );

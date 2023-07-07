@@ -4,6 +4,7 @@ import companyimage from '../media/hotel.png';
 import { useNavigate } from "react-router-dom";
 
 const LoginDialog = () => {
+    //let [isauthentic,setAuth]=useState('');
     const navigate = useNavigate();
     const [password, setpassword] = useState('');
     var [email, setEmail] = useState('');
@@ -68,7 +69,7 @@ const LoginDialog = () => {
                                         placeholder='Password'
                                         id="formpassword" className="form-control form-control-lg" />
                                 </div>
-
+                                
                                 <div className="pt-1 mb-4">
                                     <button onClick={(e) => onLogin(e, email, password,setpassword,setEmail)}
                                         style={{ borderRadius: '9px', margin: '5px', backgroundColor: '#306832', color: 'white' }} type="button" className="btn btn-lg">Login</button>

@@ -40,8 +40,8 @@ const ForgotPassword = () => {
                                                         type="email"
                                                         required
                                                         placeholder="Email address"
-                                                        name="editemail"
-                                                        id="formemail" className="form-control form-control-lg" />
+                                                        name="forgoteditemail"
+                                                        id="forgotformemail" className="form-control form-control-lg" />
                                                     
                                                 </div>
 

@@ -3,8 +3,10 @@ import Footer from "./footer";
 import companyimage from '../media/hotel.png';
 import bedmath from '../media/bedmath.jpg';
 import LoginDialog from "./LoginDialog";
+import { Form,useActionData } from "react-router-dom";
 
 const Register = () => {
+    const errors=useActionData();
     return (
         <div className="container" style={{ backgroundColor: 'white', height: '100%' }}>
             <NavBar />
@@ -32,15 +34,15 @@ const Register = () => {
 
                                             <h5 className="fw-normal mb-3 pb-3" style={{ letterSpacing: "1px" }}>Sign up for an account</h5>
 
-                                            <form >
+                                            <Form className="adduser" method="post" action="/Register">
                                                 <div className="form-outline mb-4">
                                                     <input
                                                         
                                                         type="email"
                                                         required
                                                         placeholder="Email address"
-                                                        name="editemail"
-                                                        id="formemail" className="form-control form-control-lg" />
+                                                        name="edit_email"
+                                                        id="form_email" className="form-control form-control-lg" />
                                                     
                                                 </div>
 
@@ -50,8 +52,19 @@ const Register = () => {
                                                         type="password"
                                                         required
                                                         placeholder="Password"
-                                                        name="editpass"
-                                                        id="formpassword" className="form-control form-control-lg" />
+                                                        name="edit_pass"
+                                                        id="form_password" className="form-control form-control-lg" />
+                                                    
+                                                </div>
+
+                                                <div className="form-outline mb-4">
+                                                    <input
+                                                        
+                                                        type="text"
+                                                        required
+                                                        placeholder="Name"
+                                                        name="edit_name"
+                                                        id="form_name" className="form-control form-control-lg" />
                                                     
                                                 </div>
 
@@ -62,20 +75,21 @@ const Register = () => {
                                                         maxLength={10}
                                                         required
                                                         placeholder="+27"
-                                                        name="editphone"
-                                                        id="formphone" className="form-control form-control-lg" />
+                                                        name="edit_phone"
+                                                        id="form_phone" className="form-control form-control-lg" />
                                                     
                                                 </div>
 
                                                 <div className="pt-1 mb-4">
                                                 <button 
-                                            style={{ borderRadius: '9px', margin: '5px', backgroundColor: '#306832', color: 'white' }} type="button" className="btn btn-lg">Register</button>
+                                            style={{ borderRadius: '9px', margin: '5px', backgroundColor: '#306832', color: 'white' }} type="submit" className="btn btn-lg btnSignup">Register</button>
                                                 </div>
 
-                                            </form>
-                                            
-
-                                            
+                                            </Form>
+                                            {errors && errors.errormail && <p>{errors.errormail}</p>}
+                                            {errors && errors.errorpass && <p>{errors.errorpass}</p>}
+                                            {errors && errors.errorphone && <p>{errors.errorphone}</p>}
+                                            {errors && errors.errorname && <p>{errors.errorname}</p>}
 
                                         </div>
                                     </div>
