@@ -9,6 +9,7 @@ import Register from './components/Register';
 import { Resetaction } from './Actions/Reset';
 import { RegisterAction } from './Actions/Register';
 import Bookings from './components/Bookings';
+import Update from './components/Update';
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -17,6 +18,7 @@ const router=createBrowserRouter(
       <Route path='Register' element={<Register/>} action={RegisterAction}/>
       <Route path='Forgtpassword' element={<ForgotPassword/>} action={Resetaction}/>
       <Route path='Bookings' element={<Bookings/>}/>
+      <Route path='Update/:_id' element={<Update/>}/>
       <Route path='*' element={<Comp404/>}/>
     </Route>
   )

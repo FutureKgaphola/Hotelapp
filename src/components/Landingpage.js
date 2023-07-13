@@ -48,9 +48,7 @@ const Landingpage = () => {
             })
         })
 
-    }, [])
-
-    
+    }, []);
 
 
     return (
@@ -139,9 +137,7 @@ const Landingpage = () => {
                                             <div>
                                                 <button style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</button>
                                             
-                                                <button style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'green' }} type="button" className="explore btn btn-sm">edit</button>
-                                            
-                                                <button onClick={() => handleDelete(item.id)} style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'red', borderColor: 'black', color: 'white' }} type="button" className="explore btn btn-sm">remove</button>
+                                                <button onClick={() => handleDelete(item.id,item.filename)} style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'red', borderColor: 'black', color: 'white' }} type="button" className="explore btn btn-sm">remove</button>
                                             
                                             </div>
                                              
@@ -151,7 +147,7 @@ const Landingpage = () => {
                                     </div>
                                 </div>
                                 <div className="col">
-                                    <img style={{ width: '100%', objectFit: 'cover', height: "100%", borderRadius: "0px 5px 5px 0px" }} src={bedmath} alt="Card cap" />
+                                    <img style={{ width: '100%', objectFit: 'cover', height: "100%", borderRadius: "0px 5px 5px 0px" }} src={item.img} alt="Card cap" />
                                 </div>
 
                             </div>

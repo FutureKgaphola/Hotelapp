@@ -2,9 +2,47 @@ import LoginDialog from "./LoginDialog";
 import NavBar from "./Navbar";
 import Footer from "./footer";
 import admin from '../media/admin.jpg';
-import searchicon from '../media/search.png';
+import RoomsTable from "./RoomsTable";
+import { useEffect,useState } from "react";
+import {collection,onSnapshot
+} from 'firebase/firestore';
+import { db } from '../Dbconfig/db';
+import AddRoomLDialog from "./AddRoomDialog";
+import { useNavigate } from "react-router-dom";
+
 
 const Bookings = () => {
+    const navigate=useNavigate();
+    const Goback=()=>{
+        navigate('/');
+    }
+    let [maxAvailable,SetmaxAvailable]=useState(0);
+    let [maxOccupied,SetmaxOccupied]=useState(0);
+
+    useEffect(() => {
+        let max=0;
+        const colRef = collection(db, "Rooms");
+        onSnapshot(colRef, (snapshot) => {
+            max=0;
+            snapshot?.docs.forEach((doc) => {
+                max=max+parseInt(doc.data().left);
+            });
+            SetmaxAvailable(max);
+        })
+
+        let maxres=0;
+        const col_Ref = collection(db, "Reservations");
+        onSnapshot(col_Ref, (snapshot) => {
+            maxres=0;
+            snapshot?.docs.forEach((doc) => {
+                maxres=maxres+1;
+            });
+            SetmaxOccupied(maxres);
+        })
+        
+
+    }, [])
+    
     return (
         <div className="container" style={{ backgroundColor: 'white', height: '100%' }}>
             <NavBar />
@@ -50,7 +88,7 @@ const Bookings = () => {
                 <div className="" style={{ display: 'flex', padding: '0', margin: '0', height: '200px' }}>
                     <div className="row" style={{ padding: '0', margin: '5px' }}>
                         <div style={{ display: 'flex', justifyContent: 'center', padding: '5px', margin: '0', borderRadius: '5px 5px 0px 0px', backgroundColor: 'whitesmoke' }}>
-                            <h1 className="text-danger">5</h1>
+                            <h1 className="text-danger">{maxAvailable}</h1>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '-15%', height: '50%', padding: '0', margin: '0', borderRadius: '5px', zIndex: '5', backgroundColor: 'black' }}>
                             <h4 style={{ color: 'white', marginTop: '10%' }}>Rooms available</h4>
@@ -59,7 +97,7 @@ const Bookings = () => {
 
                     <div className="row" style={{ padding: '0', margin: '5px' }}>
                         <div style={{ display: 'flex', justifyContent: 'center', padding: '5px', margin: '0', borderRadius: '5px 5px 0px 0px', backgroundColor: 'whitesmoke' }}>
-                            <h1 className="text-success">54</h1>
+                            <h1 className="text-success">{maxOccupied}</h1>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '-15%', height: '50%', padding: '0', margin: '0', borderRadius: '5px', zIndex: '5', backgroundColor: 'black' }}>
                             <h4 style={{ color: 'white', marginTop: '10%' }}>Rooms occupied</h4>
@@ -69,44 +107,16 @@ const Bookings = () => {
                 </div>
             </div>
 
-            <div style={{ display: 'flex', padding: '2px', backgroundColor: 'black', borderRadius: '20px',margin:'5px' }}>
-                    <img src={searchicon} height={'25px'} style={{ marginLeft: '5px', alignSelf: 'center' }} alt="search" />
-                    <input style={{ marginLeft: '6px', margin: '15px' }} className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
-                </div>
-
-            <table class="table table-dark table-hover table-responsive">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                    </tr>
-                </tbody>
-            </table>
+            
+                <button data-bs-toggle="modal" data-bs-target="#AddRoomModal" type="button" style={{backgroundColor:'black',color:'white',margin:'5px',fontFamily:'fantasy'}}>+Add rooms</button>
+                <button onClick={() => Goback()}
+                                                style={{ borderRadius: '9px', margin: '5px', backgroundColor: 'white', color: 'black',fontFamily:'fantasy' }}
+                                                type="button" className="btn btn-sm">Go back Home</button>  
+            <RoomsTable/>
 
             <Footer />
             <LoginDialog />
+            <AddRoomLDialog />
 
         </div>
     );

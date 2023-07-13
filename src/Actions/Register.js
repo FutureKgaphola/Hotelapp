@@ -55,13 +55,7 @@ export async function RegisterAction({request})
 
     
 
-    /*const colRef = collection(db, "Users");
-    addDoc(colRef,submission).then(()=>{
-        adduser.reset();
-        console.log('succesful');
-    }).catch((err)=>{
-        console.log(err);
-    })*/
+    
     
     return redirect('/Register');
 }

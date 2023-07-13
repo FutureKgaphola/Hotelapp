@@ -3,10 +3,14 @@ import Footer from "./footer";
 import companyimage from '../media/hotel.png';
 import bedmath from '../media/bedmath.jpg';
 import LoginDialog from "./LoginDialog";
-import { Form,useActionData } from "react-router-dom";
+import { Form,useActionData, useNavigate } from "react-router-dom";
 
 const Register = () => {
     const errors=useActionData();
+    const navigate=useNavigate();
+    const Goback=()=>{
+        navigate('/');
+    }
     return (
         <div className="container" style={{ backgroundColor: 'white', height: '100%' }}>
             <NavBar />
@@ -31,9 +35,11 @@ const Register = () => {
                                     <strong style={{ backgroundColor: 'white', padding: '5px', borderRadius: '5px' }}><span style={{ color: '#306832', fontStyle: 'italic', fontSize: '20px' }}>LIFE STYLE</span></strong>
                                 
                                             </div>
-
+                                            <button onClick={() => Goback()}
+                                                style={{ borderRadius: '9px', margin: '5px', backgroundColor: 'white', color: 'black',fontFamily:'fantasy' }}
+                                                type="button" className="btn btn-sm">Go back Home</button> 
                                             <h5 className="fw-normal mb-3 pb-3" style={{ letterSpacing: "1px" }}>Sign up for an account</h5>
-
+                                            
                                             <Form className="adduser" method="post" action="/Register">
                                                 <div className="form-outline mb-4">
                                                     <input
