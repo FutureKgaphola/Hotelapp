@@ -13,7 +13,7 @@ const Footer = () => {
                 <div className='col'>
                     <h2>Contacts</h2>
                     <Link><i className="fa fa-phone"></i>   071 546 4000</Link>
-                    <Link><i className="fa fa-envelope"></i>    info@marula</Link>
+                    <Link><i className="fa fa-envelope"></i>    info@marula.co.za</Link>
 
                 </div>
                 <div className='col'>

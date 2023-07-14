@@ -138,7 +138,7 @@ const Landingpage = () => {
                                                 <Link to={`/RoomsPreview/${item.id}`} style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</Link>
                                             
                                                 <button onClick={() => handleDelete(item.id,item.filename)} style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'red', borderColor: 'black', color: 'white' }} type="button" className="explore btn btn-sm">remove</button>
-                                            
+                                                <span class="badge bg-dark">R{item.cost}</span>
                                             </div>
                                              
                                         : <button style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</button>
