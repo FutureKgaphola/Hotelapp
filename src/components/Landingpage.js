@@ -10,6 +10,7 @@ import Footer from './footer';
 import LoginDialog from './LoginDialog';
 import { handleDelete } from '../Handlers/Handles';
 import { getAuth } from "firebase/auth";
+import { Link } from 'react-router-dom';
 
 
 const Landingpage = () => {
@@ -134,7 +135,7 @@ const Landingpage = () => {
                                         {
                                             isAdminEmail && (String(isAdminEmail)).toLowerCase()==="admin@marula.co.za" ? 
                                             <div>
-                                                <button style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</button>
+                                                <Link to={`/RoomsPreview/${item.id}`} style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</Link>
                                             
                                                 <button onClick={() => handleDelete(item.id,item.filename)} style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'red', borderColor: 'black', color: 'white' }} type="button" className="explore btn btn-sm">remove</button>
                                             
