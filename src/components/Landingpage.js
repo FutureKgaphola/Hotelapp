@@ -1,6 +1,5 @@
 
 import bedimage from '../media/restbed.jpg';
-import bedmath from '../media/bedmath.jpg';
 import searchicon from '../media/search.png';
 import { onSnapshot, collection } from "firebase/firestore";
 import { db } from '../Dbconfig/db';
@@ -126,9 +125,9 @@ const Landingpage = () => {
                                         <strong style={{ backgroundColor: 'white', padding: '5px', borderRadius: '5px' }}><span style={{ color: '#306832', fontStyle: 'italic', fontSize: '20px' }}>{item.roomtype}</span></strong>
                                         <div style={{ background: 'rgba(51, 49, 49, 0.46)', borderRadius: '5px', padding: '5px' }}>
                                             <ul>
-                                                <li style={{ color: 'white' }} >2 x beds</li>
-                                                <li style={{ color: 'white' }} >1 x shower</li>
-                                                <li style={{ color: 'white' }} >3 x sheets</li>
+                                                <li style={{ color: 'white' }} >{item.contents[0]}</li>
+                                                <li style={{ color: 'white' }} >{item.contents[1]}</li>
+                                                
                                             </ul>
                                         </div>
                                         

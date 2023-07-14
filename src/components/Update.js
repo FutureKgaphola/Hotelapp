@@ -10,6 +10,8 @@ import NavBar from './Navbar';
 import Footer from './footer';
 import LoginDialog from './LoginDialog';
 import { useNavigate, useParams } from 'react-router-dom';
+import { getStorage, ref, deleteObject,getDownloadURL,uploadBytes } from "firebase/storage";
+import { v4 } from 'uuid';
 
 const Update = () => {
     const navigate=useNavigate();
@@ -19,21 +21,32 @@ const Update = () => {
     const [MaxBeds,SetMaxBeds]=useState('');
     const [MaxShowers,SetMaxShowers]=useState('');
     const [Available,SetAvailable]=useState('no');
+    const [RoomImage,SetRoomImage]=useState(null);
+    const [imageupload,setimageupload]=useState(null);
+    const [RoomName,SetRoomName]=useState(null);
 
+    const setpickedImage=(file)=>{
+        if(file==null) return;
+
+        const url=URL.createObjectURL(file);
+        SetRoomImage(url);
+        setimageupload(file);
+    }
     
     useEffect(()=>{
         const colRef= doc(db,"Rooms",_id);
     onSnapshot(colRef,(snapshot)=>{
             try {
-                SetRoomType(snapshot.data().roomtype);
-                SetMaxRooms(snapshot.data().left);
+                SetRoomType(snapshot.data().roomtype.trim());
+                SetMaxRooms(snapshot.data().left.trim());
                 SetMaxBeds((snapshot.data().contents[0].substring(0,(snapshot.data().contents[0]).indexOf("X"))).trim());
                 SetMaxShowers((snapshot.data().contents[1].substring(0,(snapshot.data().contents[1]).indexOf("X"))).trim());
-                SetAvailable(snapshot.data().isavailable);
-            
+                SetAvailable(snapshot.data().isavailable.trim());
+                SetRoomImage(snapshot.data().img.trim());
+                SetRoomName(snapshot.data().filename.trim());
                 
             } catch (error) {
-                
+                message.error(String(error));
             }
 
         })
@@ -78,34 +91,83 @@ const Update = () => {
 
     const AddRoom =(event)=>{
         event.preventDefault();
-        var update = {
-            roomtype: RoomType,
-            contents:[MaxBeds+' X Bed(s)', MaxShowers+' X Shower(s)'] ,
-            isavailable: Available,
-            left: MaxRooms
-        }
 
-        if (isAllOK()) {
+        if(imageupload!==null && RoomImage!==null){
+            //remove image then upload new one it again n get url n name
+            const storage = getStorage();
+            const desertRef = ref(storage, `Hotels/${RoomName.trim()}`);
+            message.info('Attempting to update room. this may take some time please wait....',4);
+            deleteObject(desertRef).then(() => {
+
+                var filename=imageupload.name+v4();
+                var filepath=`Hotels/${filename}`;
+                const imageRef=ref(storage,filepath);
+                uploadBytes(imageRef,imageupload).then(()=>{
+                    getDownloadURL(ref(storage,filepath)).then((url)=>{
+                        var update={}
+                        if(String(url)!==null && String(filename)!==null)
+                        {
+                            update = {
+                                roomtype: RoomType,
+                                contents:[MaxBeds+' X Bed(s)', MaxShowers+' X Shower(s)'] ,
+                                isavailable: Available,
+                                left: MaxRooms,
+                                img:url,
+                                filename:filename
+                            }
+                        }else{
+                            update = {
+                                roomtype: RoomType,
+                                contents:[MaxBeds+' X Bed(s)', MaxShowers+' X Shower(s)'] ,
+                                isavailable: Available,
+                                left: MaxRooms
+                            }
+                        }
+
+                        if (isAllOK()) {
             
-                setDoc(doc(db,'Rooms',_id.trim()),update,{merge:true}).then(() => {
-                    const updateroom = document.querySelector('.updateroom');
-                    updateroom.reset();
-                    SetRoomType('');
-                    SetMaxRooms('');
-                    SetMaxBeds('');
-                    SetMaxShowers('');
-                    SetAvailable('');
-                    navigate('/Bookings');
-                    message.success('Updated Succesfully.');
+                            setDoc(doc(db,'Rooms',_id.trim()),update,{merge:true}).then(() => {
+                                const updateroom = document.querySelector('.updateroom');
+                                updateroom.reset();
+                                SetRoomType('');
+                                SetMaxRooms('');
+                                SetMaxBeds('');
+                                SetMaxShowers('');
+                                SetAvailable('');
+                                navigate('/Bookings');
+                                message.success('Updated Succesfully.');
+                                
+            
+                            }).catch((err) => {
+                                message.error(String(err));
+                            });
+            
+                    } else {
+                        message.error("Some fields did not meet the requirement(s)");
+                    } 
+
+                    }).catch((err) => {
+                    message.error(String(err));
+                })
                     
 
                 }).catch((err) => {
                     message.error(String(err));
-                });
+                })
+                
+            }).catch((error) => {
+                message.error(String(error));
+                window.location.reload(true);
+            });
+        }else{
 
-        } else {
-            message.error("Some fields did not meet the requirement(s)");
-        }    
+        }
+
+
+
+        
+
+           
        
     }
 
@@ -117,6 +179,7 @@ const Update = () => {
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
+                    <img src={companyimage} alt={'logo'} style={{ width: "50px", height: "50px" }} />
                         <h1 className="modal-title fs-5" id="AddRoomModalLabel">Updating a rooms</h1>  
                         <button onClick={() => Goback()}
                                     style={{ borderRadius: '9px', margin: '5px', backgroundColor: 'white', color: 'black',fontFamily:'fantasy' }}
@@ -128,9 +191,12 @@ const Update = () => {
 
                             <div className="d-flex align-items-center mb-3 pb-1">
 
-                                <img src={companyimage} alt={'logo'} style={{ width: "50px", height: "50px" }} />
-                                <span className="h1 fw-bold mb-0">Marula </span>
-                                <strong style={{ backgroundColor: 'white', padding: '5px', borderRadius: '5px' }}><span style={{ color: '#306832', fontStyle: 'italic', fontSize: '20px' }}>LIFE STYLE</span></strong>
+                                <img src={RoomImage} alt={'room'} style={{ width: "100%", height: "300px",borderRadius:'5px' }} />
+                                
+                            </div>
+                            <div className="mb-3">
+                                    <label htmlFor="formFile" className="form-label">Select Room image</label>
+                                    <input onChange={(event)=>setpickedImage(event.target.files[0])} className="form-control" type="file" id="formFile"/>
                             </div>
 
                             <h5 className="fw-normal mb-3 pb-3" style={{ letterSpacing: "1px" }}>Updating a room of your system</h5>

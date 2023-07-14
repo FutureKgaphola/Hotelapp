@@ -2,37 +2,59 @@ import { useEffect, useState } from "react";
 import bedimage from '../media/restbed.jpg';
 import { DatePicker, Space, message } from 'antd';
 import { db } from '../Dbconfig/db';
-import { handleDelete } from '../Handlers/Handles';
+import { handleDelete, handlereservationDelete } from '../Handlers/Handles';
 import {
     addDoc, collection, onSnapshot, doc, setDoc
 } from 'firebase/firestore';
 import searchicon from '../media/search.png';
-import { Link } from "react-router-dom";
+import { Link, useRevalidator } from "react-router-dom";
 
 
 const { RangePicker } = DatePicker;
 
-const RoomsTable = () => {
+const RoomsTable = ({ res }) => {
+    const validate =useRevalidator();
     const [Name, SetName] = useState('');
     const [Phone, SetPhone] = useState('');
     const [Email, SetEmail] = useState('');
     const [bookDate, SetbookDate] = useState('');
     var [chalets, setchalet] = useState([]);
     const [search, setsearch] = useState('');
+    const [res_search, setResrvSearch] = useState('');
+    var [reservs, setReservs] = useState([]);
 
-
-   
     const [book, setBook] = useState({
         isform: false,
         item: null
     });
     var setDate = (date, datecompined) => {
-
-        if (String(datecompined[0]).trim() && String(datecompined[1]).trim()) {
-            SetbookDate("start date: " + datecompined[0] + " end date:" + datecompined[1]);
+        if (datecompined[0] !== null && datecompined[1] !== null) {
+            if (String(datecompined[0]).trim() && String(datecompined[1]).trim()) {
+                SetbookDate("start date: " + datecompined[0] + " end date: " + datecompined[1]);
+            }
         }
+
     }
-    var Goback=()=>{
+    var setUpdateDate = (date,datecompined, _id) => {
+        if (datecompined[0] !== null && datecompined[1] !== null) {
+            if (String(datecompined[0]).trim() && String(datecompined[1]).trim()) {
+                var update = {}
+                update = {
+                    bookDate: "start date: " + datecompined[0] + " end date: " + datecompined[1],
+                }
+                setDoc(doc(db, 'Reservations', _id.trim()), update, { merge: true }).then(() => {
+
+                    message.success('Updated Succesfully.');
+                    validate.revalidate();
+
+                }).catch((err) => {
+                    message.error(String(err));
+                });
+            }
+        }
+
+    }
+    var Goback = () => {
         setBook({
             isform: false,
             item: null
@@ -126,13 +148,77 @@ const RoomsTable = () => {
 
         })
 
+        const colRef_resev = collection(db, "Reservations");
+        let resrvation = [];
+        onSnapshot(colRef_resev, (snapshot) => {
+            resrvation = [];
+            snapshot?.docs.forEach((doc) => {
+                resrvation.push(
+                    {
+                        id: doc.id,
+                        ...doc.data()
+                    }
+                );
+                setReservs(resrvation);
+            });
+
+        })
+
 
     }, [])
 
     return (
         <div>
+            {res &&
+
+                <div>
+                    <div style={{ display: 'flex', padding: '2px', backgroundColor: 'black', borderRadius: '20px', margin: '5px' }}>
+                        <img src={searchicon} height={'25px'} style={{ marginLeft: '5px', alignSelf: 'center' }} alt="search" />
+                        <input value={res_search} onChange={(e) => setResrvSearch(e.target.value)} style={{ marginLeft: '6px', margin: '15px' }} className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
+                    </div>
+                    <table className="table table-dark table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th scope="col">Client Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Room</th>
+                                <th scope="col">Booking Date</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                reservs.filter((value) => {
+                                    return res_search.toLowerCase() === '' ? value : value.Name.toLowerCase().includes(res_search);
+                                }).map((item) => (
+                                    <tr key={item.id}>
+                                        <th scope="row">{item.Name}</th>
+                                        <td>{item.Email}</td>
+                                        <td>{item.Phone}</td>
+                                        <td>{item.RoomBooked}</td>
+                                        <td>{item.bookDate} <Space direction="vertical" size={12}>
+                                            <RangePicker
+                                                onCalendarChange={(date,datecompined) => setUpdateDate(date,datecompined, item.id)} />
+                                        </Space></td>
+                                        <td>
+                                            <button
+                                                onClick={() => handlereservationDelete(item.id)}
+                                                className="btn btn-danger">Delete</button>
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            }
 
             {
+
                 !book.isform ?
                     <div>
                         <div style={{ display: 'flex', padding: '2px', backgroundColor: 'black', borderRadius: '20px', margin: '5px' }}>
@@ -174,9 +260,9 @@ const RoomsTable = () => {
                                             </td>
 
                                             <td>
-                                            <Link 
-                                            to={`/Update/${item.id}`}
-                                            className="btn btn-warning">Edit</Link>
+                                                <Link
+                                                    to={`/Update/${item.id}`}
+                                                    className="btn btn-warning">Edit</Link>
 
 
                                             </td>
@@ -184,8 +270,8 @@ const RoomsTable = () => {
                                             <td>
                                                 {
                                                     item.isavailable === "yes" &&
-                                                    <button 
-                                                    onClick={() => handleDelete(item.id,item.filename)}
+                                                    <button
+                                                        onClick={() => handleDelete(item.id, item.filename)}
                                                         className="btn btn-danger">Delete</button>
                                                 }
 
@@ -270,7 +356,7 @@ const RoomsTable = () => {
                                         type="tel" className="form-control" id="phone" aria-describedby="emailHelp" placeholder="Phone" />
                                     <small style={{ color: 'white' }} className="form-text text-muted">We'll never share your phone number.</small>
                                 </div>
-                                <Space direction="vertical" size={12}>
+                                <Space direction="vertical" size={10}>
                                     <RangePicker
                                         onCalendarChange={(date, datecompined) => setDate(date, datecompined)} />
                                 </Space>
@@ -280,7 +366,7 @@ const RoomsTable = () => {
                                     type="button" className="btn btn-sm">book</button>
 
                                 <button onClick={() => Goback()}
-                                    style={{ borderRadius: '9px', margin: '5px', backgroundColor: 'white', color: 'black',fontFamily:'fantasy' }}
+                                    style={{ borderRadius: '9px', margin: '5px', backgroundColor: 'white', color: 'black', fontFamily: 'fantasy' }}
                                     type="button" className="btn btn-sm">Go back</button>
 
                             </form>

@@ -16,8 +16,18 @@ const Bookings = () => {
     const Goback=()=>{
         navigate('/');
     }
-    let [maxAvailable,SetmaxAvailable]=useState(0);
-    let [maxOccupied,SetmaxOccupied]=useState(0);
+    const [res,setResevations]=useState(false);
+    const [maxAvailable,SetmaxAvailable]=useState(0);
+    const [maxOccupied,SetmaxOccupied]=useState(0);
+
+    const ShowResevations=()=>
+    {
+        if(!res){
+            setResevations(true);
+        }else{
+            setResevations(false);
+        }
+    }
 
     useEffect(() => {
         let max=0;
@@ -106,13 +116,21 @@ const Bookings = () => {
 
                 </div>
             </div>
-
-            
-                <button data-bs-toggle="modal" data-bs-target="#AddRoomModal" type="button" style={{backgroundColor:'black',color:'white',margin:'5px',fontFamily:'fantasy'}}>+Add rooms</button>
                 <button onClick={() => Goback()}
-                                                style={{ borderRadius: '9px', margin: '5px', backgroundColor: 'white', color: 'black',fontFamily:'fantasy' }}
-                                                type="button" className="btn btn-sm">Go back Home</button>  
-            <RoomsTable/>
+                style={{ borderRadius: '9px', margin: '5px', backgroundColor: 'white', color: 'black',fontFamily:'fantasy' }}
+                type="button" className="btn btn-sm">Go back Home</button> 
+
+                <button
+                data-bs-toggle="modal" data-bs-target="#AddRoomModal"
+                style={{ borderRadius: '9px', margin: '5px', backgroundColor: 'white', color: 'black',fontFamily:'fantasy' }}
+                type="button" className="btn btn-sm">+Add rooms</button> 
+                
+
+                <button onClick={()=>ShowResevations()}
+                style={{ borderRadius: '9px', margin: '5px', backgroundColor: 'white', color: 'black',fontFamily:'fantasy' }}
+                type="button" className="btn btn-sm">Reservations</button>  
+
+            <RoomsTable res={res}/>
 
             <Footer />
             <LoginDialog />
