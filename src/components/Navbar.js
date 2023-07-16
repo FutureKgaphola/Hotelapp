@@ -23,6 +23,7 @@ export function onLogin(event,email,password,setpassword,setEmail){
                 event.target.disabled=false;
                 event.target.innerHTML="Login";
             }, 2000);
+            //event.target.setAttribute('data-bs-dismiss', 'modal');
         }).catch((err)=>{
             setpassword('');
             event.target.innerHTML=err;
@@ -87,7 +88,7 @@ const NavBar = () => {
             </div>
 
             <div id='logindiv' className="col" style={{ textAlign: 'right' }}>
-                {isAuth && isAuth.authId ? <MoreButtons props={setAuth} /> : <button style={{ borderRadius: '9px', margin: '5px', borderColor: 'black', color: 'black' }} type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" className="btn btn-sm">sign in</button>}
+                {isAuth && isAuth.authId ? <MoreButtons props={setAuth} isAuth={isAuth} /> : <button style={{ borderRadius: '9px', margin: '5px', borderColor: 'black', color: 'black' }} type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" className="btn btn-sm">sign in</button>}
                 
                 <Link to={'/Register'} style={{ borderRadius: '9px', margin: '5px', backgroundColor: '#306832', color: 'white' }} type="button" className="btn btn-sm">sign up</Link>
             </div>

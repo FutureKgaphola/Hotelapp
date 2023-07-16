@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import bedimage from '../media/restbed.jpg';
 import { DatePicker, Space, message } from 'antd';
 import { db } from '../Dbconfig/db';
 import { handleDelete, handlereservationDelete } from '../Handlers/Handles';
@@ -14,13 +13,13 @@ const { RangePicker } = DatePicker;
 
 const RoomsTable = ({ res }) => {
     const validate =useRevalidator();
-    const [Name, SetName] = useState('');
-    const [Phone, SetPhone] = useState('');
-    const [Email, SetEmail] = useState('');
-    const [bookDate, SetbookDate] = useState('');
+    const [Name, SetName] = useState("");
+    const [Phone, SetPhone] = useState("");
+    const [Email, SetEmail] = useState("");
+    const [bookDate, SetbookDate] = useState("");
     var [chalets, setchalet] = useState([]);
-    const [search, setsearch] = useState('');
-    const [res_search, setResrvSearch] = useState('');
+    const [search, setsearch] = useState("");
+    const [res_search, setResrvSearch] = useState("");
     var [reservs, setReservs] = useState([]);
 
     const [book, setBook] = useState({
@@ -63,17 +62,17 @@ const RoomsTable = ({ res }) => {
 
     var isAllOK = () => {
         var result = true;
-        if (Name.trim() === null) {
+        if (Name.trim() === "") {
             result = false;
         }
-        if (Phone.trim() === null) {
+        if (Phone.trim() === "") {
             result = false;
         }
 
-        if (Email.trim() === null) {
+        if (Email.trim() === "") {
             result = false;
 
-        } if (bookDate.trim() === null) {
+        } if (bookDate.trim() === "") {
             result = false;
         }
         return result;
@@ -87,7 +86,8 @@ const RoomsTable = ({ res }) => {
             Phone: Phone,
             Email: Email,
             bookDate: bookDate,
-            RoomBooked: book.item.roomtype
+            RoomBooked: book.item.roomtype,
+            ownerId: 'tc9kUmx9avNAmtOgFfLLffRDpqu2' //or admin id
         }
         var update = {};
         if (parseInt(book.item.left) - 1 < 1) {
@@ -123,7 +123,7 @@ const RoomsTable = ({ res }) => {
                 })
             }).catch((err) => {
                 message.error(String(err));
-            })
+            });
 
         } else {
             message.error("Some fields did not meet the requirement(s)");
@@ -293,7 +293,7 @@ const RoomsTable = ({ res }) => {
                     <div className="row" style={{ padding: '5%' }}>
                         <div className="col-lg-6 col-sm-0">
                             <div className="row" style={{
-                                backgroundImage: `url(${bedimage})`,
+                                backgroundImage: `url(${book.item.img})`,
                                 backgroundSize: 'cover',
                                 height: '380px',
                                 backgroundRepeat: 'no-repeat',
@@ -310,7 +310,7 @@ const RoomsTable = ({ res }) => {
                                                 background: 'rgba(51, 49, 49, 0.46)',
                                             }}>
                                             <div className="col-lg-12">
-                                                <span style={{ color: 'white', fontFamily: 'cursive', fontSize: "65px" }}>Marula bookings </span>
+                                                <span style={{ color: 'white', fontFamily: 'cursive', fontSize: "65px" }}>{book.item.roomtype} </span>
                                                 <strong style={{ backgroundColor: 'white', padding: '5px', borderRadius: '5px' }}><span style={{ color: '#306832', fontStyle: 'italic', fontSize: '20px' }}>LIFE STYLE</span></strong>
 
                                             </div>
@@ -322,7 +322,22 @@ const RoomsTable = ({ res }) => {
                                         </div>
                                     </div>
                                     <div className="col">
-                                        ...
+                                    <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                            More details
+                                        </button>
+
+                                        <div class="collapse" id="collapseExample">
+                                        <div class="card card-body">
+                                            
+                                                <span style={{margin:'5px'}} className="badge rounded-pill bg-warning text-dark">{"R"+book.item.cost+" per night"}</span>
+                                                <ul>
+                                                <li style={{ color: 'black' }} >{book.item.contents[0]}</li>
+                                                <li style={{ color: 'black' }} >{book.item.contents[1]}</li>
+                                                
+                                                </ul>
+                                            
+                                        </div>
+                                        </div>
                                     </div>
                                 </div>
 

@@ -11,17 +11,19 @@ import { RegisterAction } from './Actions/Register';
 import Bookings from './components/Bookings';
 import Update from './components/Update';
 import RoomPreview from './components/RoomPreview';
+import Profile from './components/Profile';
 
 const router=createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<ParentLayout/>}>
       <Route index element={<Landingpage/>}/>
-      <Route path='Register' element={<Register/>} action={RegisterAction}/>
-      <Route path='Forgtpassword' element={<ForgotPassword/>} action={Resetaction}/>
-      <Route path='Bookings' element={<Bookings/>}/>
-      <Route path='Update/:_id' element={<Update/>}/>
-      <Route path='RoomsPreview/:_id' element={<RoomPreview/>}/>
-      <Route path='*' element={<Comp404/>}/>
+      <Route exact path='Register' element={<Register/>} action={RegisterAction}/>
+      <Route exact path='Forgtpassword' element={<ForgotPassword/>} action={Resetaction}/>
+      <Route exact path='Bookings' element={<Bookings/>}/>
+      <Route exactpath='Update/:_id' element={<Update/>}/>
+      <Route exact path='RoomsPreview/:_id' element={<RoomPreview/>}/>
+      <Route exact path='Profile/:_id' element={<Profile/>}/>
+      <Route exact path='*' element={<Comp404/>}/>
     </Route>
   )
 );

@@ -4,22 +4,14 @@ import companyimage from '../media/hotel.png';
 import { useNavigate } from "react-router-dom";
 
 const LoginDialog = () => {
-    //let [isauthentic,setAuth]=useState('');
+
     const navigate = useNavigate();
     const [password, setpassword] = useState('');
     var [email, setEmail] = useState('');
 
     var submitfields = (event) => {
         event.preventDefault();
-        if (String(event.target[3].innerHTML).trim() === "Forgot password?") {
-            event.target[1].style.display = 'none';
-            event.target[2].innerHTML = 'Reset password';
-            event.target[3].innerHTML = "Back to login";
-        } else {
-            event.target[1].style.display = 'block';
-            event.target[2].innerHTML = 'Login';
-            event.target[3].innerHTML = "Forgot password?";
-        }
+        
     }
 
     var getForgotpass = () => {

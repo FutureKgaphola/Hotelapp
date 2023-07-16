@@ -1,6 +1,7 @@
 
 import bedimage from '../media/restbed.jpg';
 import searchicon from '../media/search.png';
+import hotel_with_background from '../media/hotel_with_background.jpg';
 import { onSnapshot, collection } from "firebase/firestore";
 import { db } from '../Dbconfig/db';
 import { useEffect, useState } from 'react';
@@ -8,9 +9,9 @@ import NavBar from './Navbar';
 import Skeleton from './skeleton';
 import Footer from './footer';
 import LoginDialog from './LoginDialog';
-import { handleDelete } from '../Handlers/Handles';
 import { getAuth } from "firebase/auth";
 import { Link } from 'react-router-dom';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 
 const Landingpage = () => {
@@ -85,7 +86,7 @@ const Landingpage = () => {
                         </div>
                     </div>
                     <div className="col">
-                        ...
+                        .
                     </div>
                 </div>
 
@@ -132,22 +133,22 @@ const Landingpage = () => {
                                             </ul>
                                         </div>
                                         
-                                        {
-                                            isAdminEmail && (String(isAdminEmail)).toLowerCase()==="admin@marula.co.za" ? 
-                                            <div>
-                                                <Link to={`/RoomsPreview/${item.id}`} style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</Link>
-                                            
-                                                <button onClick={() => handleDelete(item.id,item.filename)} style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'red', borderColor: 'black', color: 'white' }} type="button" className="explore btn btn-sm">remove</button>
-                                                <span class="badge bg-dark">R{item.cost}</span>
-                                            </div>
-                                             
-                                        : <button style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</button>
-                                        }
-                                        
+                                        <Link to={`/RoomsPreview/${item.id}`} style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</Link>
+                                        <span className="badge bg-dark">{"R"+item.cost+" per night"}</span>
                                     </div>
                                 </div>
                                 <div className="col">
-                                    <img style={{ width: '100%', objectFit: 'cover', height: "100%", borderRadius: "0px 5px 5px 0px" }} src={item.img} alt="Card cap" />
+                                <LazyLoadImage
+                                    key={item.filename}
+                                    placeholderSrc={hotel_with_background}
+                                    visibleByDefault={item.img === hotel_with_background}
+                                    effect='blur'
+                                    style={{ width: '100%', objectFit: 'cover', height: "100%", borderRadius: "0px 5px 5px 0px" }}
+                                    alt={'Room_image'}
+                                    height={"100%"}
+                                    src={item.img} 
+                                    width={"100%"} />
+
                                 </div>
 
                             </div>
