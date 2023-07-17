@@ -20,8 +20,8 @@ const router=createBrowserRouter(
       <Route exact path='Register' element={<Register/>} action={RegisterAction}/>
       <Route exact path='Forgtpassword' element={<ForgotPassword/>} action={Resetaction}/>
       <Route exact path='Bookings' element={<Bookings/>}/>
-      <Route exactpath='Update/:_id' element={<Update/>}/>
-      <Route exact path='RoomsPreview/:_id' element={<RoomPreview/>}/>
+      <Route exact path='Update/:_id' element={<Update/>}/>
+      <Route exact path='RoomsPreview/:_id/:Authid' element={<RoomPreview/>}/>
       <Route exact path='Profile/:_id' element={<Profile/>}/>
       <Route exact path='*' element={<Comp404/>}/>
     </Route>

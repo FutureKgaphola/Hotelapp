@@ -18,6 +18,7 @@ const Landingpage = () => {
 
     var [chalets, setchalet] = useState([]);
     var [isAdminEmail,setAuthEmail]=useState(null);
+    var [Authid,setAuthid]=useState(null);
     var [isLoading, setisLoading] = useState(true);
     const [search, setsearch] = useState('');
 
@@ -43,9 +44,15 @@ const Landingpage = () => {
                 if(!user)
                 {
                     setAuthEmail(null);
-                }else{
+                    setAuthid(null);
+                }else if(sessionStorage.getItem("id")===user.uid){
                     setAuthEmail(user.email);
+                    setAuthid(user.uid);
+                }else{
+                    setAuthEmail(null);
+                    setAuthid(null);
                 }
+                
             })
         })
 
@@ -81,6 +88,8 @@ const Landingpage = () => {
                             <div className="col-col-lg-12">
                                 <h4 style={{ color: 'white' }}>IT IS TIME FOR ADVENTURE</h4>
                                 <h4 style={{ color: 'white' }}> AND EXPERIENCE</h4>
+                                
+                                <span data-bs-toggle="modal" data-bs-target="#exampleModal" style={{margin:'5px'}} className="badge bg-success"><i className='fa fa-user-circle' style={{fontSize:'20px',color:'white',paddingRight:'3px'}}></i>{isAdminEmail}</span>
                             </div>
 
                         </div>
@@ -106,8 +115,6 @@ const Landingpage = () => {
                     <img src={searchicon} height={'25px'} style={{ marginLeft: '5px', alignSelf: 'center' }} alt="search" />
                     <input style={{ marginLeft: '6px', margin: '18px' }} value={search} onChange={(e) => setsearch(e.target.value)} className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
                 </div>
-
-                {isAdminEmail}
                 
             </div>
 
@@ -132,8 +139,11 @@ const Landingpage = () => {
                                                 
                                             </ul>
                                         </div>
+
+                                        {
+                                            isAdminEmail && isAdminEmail.toLowerCase()!=='admin@marula.co.za' && <Link to={`/RoomsPreview/${item.id}/${Authid}`} style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</Link>
+                                        }
                                         
-                                        <Link to={`/RoomsPreview/${item.id}`} style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">explore</Link>
                                         <span className="badge bg-dark">{"R"+item.cost+" per night"}</span>
                                     </div>
                                 </div>

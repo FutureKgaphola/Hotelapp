@@ -322,12 +322,12 @@ const RoomsTable = ({ res }) => {
                                         </div>
                                     </div>
                                     <div className="col">
-                                    <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                    <button className="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                                             More details
                                         </button>
 
-                                        <div class="collapse" id="collapseExample">
-                                        <div class="card card-body">
+                                        <div className="collapse" id="collapseExample">
+                                        <div className="card card-body">
                                             
                                                 <span style={{margin:'5px'}} className="badge rounded-pill bg-warning text-dark">{"R"+book.item.cost+" per night"}</span>
                                                 <ul>
@@ -349,6 +349,7 @@ const RoomsTable = ({ res }) => {
                                     <label style={{ color: 'white' }} htmlFor="exampleInputEmail1">Name and Surname</label>
                                     <input
                                         value={Name}
+                                        required
                                         onChange={(e) => SetName(e.target.value)}
                                         type="text" className="form-control" id="name" name="_name" aria-describedby="emailHelp" placeholder="Name and Surname" />
                                     <small style={{ color: 'white' }} className="form-text text-muted">We'll never share your Name.</small>
@@ -358,6 +359,7 @@ const RoomsTable = ({ res }) => {
                                     <input
                                         value={Email}
                                         name="_email"
+                                        required
                                         onChange={(e) => SetEmail(e.target.value)}
                                         type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" />
                                     <small style={{ color: 'white' }} className="form-text text-muted">We'll never share your email with anyone else.</small>
@@ -366,6 +368,7 @@ const RoomsTable = ({ res }) => {
                                     <label style={{ color: 'white' }} htmlFor="exampleInputEmail1">Phone</label>
                                     <input
                                         value={Phone}
+                                        required
                                         name="_phone"
                                         onChange={(e) => SetPhone(e.target.value)}
                                         type="tel" className="form-control" id="phone" aria-describedby="emailHelp" placeholder="Phone" />

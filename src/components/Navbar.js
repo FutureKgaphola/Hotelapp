@@ -23,7 +23,8 @@ export function onLogin(event,email,password,setpassword,setEmail){
                 event.target.disabled=false;
                 event.target.innerHTML="Login";
             }, 2000);
-            //event.target.setAttribute('data-bs-dismiss', 'modal');
+            sessionStorage.setItem("id", res.user.uid);
+            window.location.reload();
         }).catch((err)=>{
             setpassword('');
             event.target.innerHTML=err;
@@ -38,7 +39,10 @@ export function onLogin(event,email,password,setpassword,setEmail){
 
 export function sign_out(props){
     
-    auth.signOut().catch((err) => {
+    auth.signOut().then(()=>{
+        sessionStorage.setItem("id",'');
+        window.location.replace("/");
+    }).catch((err) => {
 
         message.error(String(err));
     });
@@ -58,15 +62,18 @@ const NavBar = () => {
         auth.onAuthStateChanged(user=>{
             if(user)
             {
-                try {
-                    setAuth({
-                        authEmail:user.email,
-                        authId:user.uid,
-                    });
-
-                } catch (error) {
-                    console.log(error);
+                if(sessionStorage.getItem("id")===user.uid){
+                    try {
+                        setAuth({
+                            authEmail:user.email,
+                            authId:user.uid,
+                        });
+    
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
+                
             }
         })
 

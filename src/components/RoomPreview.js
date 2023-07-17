@@ -13,18 +13,18 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const { RangePicker } = DatePicker;
 const RoomPreview = () => {
-    const { _id } = useParams();
+    const { _id,Authid } = useParams();
     const [RoomType, SetRoomType] = useState('');
     const [MaxRooms, SetMaxRooms] = useState('0');
-    const [MaxBeds, SetMaxBeds] = useState('');
-    const [MaxShowers, SetMaxShowers] = useState('');
+    const [MaxBeds, SetMaxBeds] = useState('0');
+    const [MaxShowers, SetMaxShowers] = useState('0');
     const [Available, SetAvailable] = useState('no');
     const [RoomImage, SetRoomImage] = useState(null);
     const [RoomName, SetRoomName] = useState(null);
     const [bookDate, SetbookDate] = useState("");
-    const [Name, SetName] = useState('future');
-    const [Phone, SetPhone] = useState('0760170950');
-    const [Email, SetEmail] = useState('futurekgaphola@gmail.com');
+    const [Name, SetName] = useState('');
+    const [Phone, SetPhone] = useState('');
+    const [Email, SetEmail] = useState('');
     const [cost, Setcost] = useState('');
     const navigate=useNavigate();
 
@@ -52,11 +52,25 @@ const RoomPreview = () => {
 
             } catch (error) {
                 message.error(String(error));
+                window.location.replace("/");
             }
+        });
 
-        })
+        var document= doc(db,"Users",Authid)
+        
+            onSnapshot(document,(snapshot)=>{
+                try {
+                    SetName(snapshot.data().name);
+                    SetPhone(snapshot.data().phone);
+                    SetEmail(snapshot.data().email);
+                } catch (error) {
+                
+                    message.error(String(error));
+                    window.location.replace("/");
+                }
+            });
 
-    }, [_id]);
+    }, [_id,Authid]);
     
 
     var isAllOK = () => {
@@ -88,7 +102,7 @@ const RoomPreview = () => {
                 Email: Email,
                 bookDate: bookDate,
                 RoomBooked: RoomType,
-                ownerId: 'tc9kUmx9avNAmtOgFfLLffRDpqu2' //or admin id
+                ownerId: Authid 
             }
             var update = {};
             if (parseInt(MaxRooms) - 1 < 1) {
@@ -137,7 +151,7 @@ const RoomPreview = () => {
             <div className="row" style={{ margin: '5px', padding: '0', borderRadius: "0px 5px 5px 0px", backgroundColor: '#306832' }}>
                 <div className="col" style={{ margin: '5px' }}>
                     <div className="card-body">
-                    <Link to={'/'} style={{margin:'3px'}}><span class="badge bg-dark text-light">{"<- Go Back"}</span></Link>
+                    <Link to={'/'} style={{margin:'3px'}}><span className="badge bg-dark text-light">{"<- Go Back"}</span></Link>
                         <strong style={{ backgroundColor: 'white', padding: '5px', borderRadius: '5px' }}><span style={{ color: '#306832', fontStyle: 'italic', fontSize: '20px' }}>{RoomType}</span></strong>
                         <div style={{ background: 'rgba(51, 49, 49, 0.46)', borderRadius: '5px', padding: '5px' }}>
                             <ul>
@@ -155,7 +169,7 @@ const RoomPreview = () => {
                                             onCalendarChange={(date, datecompined) => setDate(date, datecompined)} />
                             </Space>
 
-                            {Available && <button onClick={()=>onsubmit()} style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">Book</button>}
+                            {Available && MaxRooms && Available!=='no' && MaxRooms!=='0' && Authid && <button onClick={()=>onsubmit()} style={{ borderRadius: '9px', margin: '5px', width: '65px', backgroundColor: 'white', borderColor: 'black', color: 'black' }} type="button" className="explore btn btn-sm">Book</button>}
 
                         </form>
                         

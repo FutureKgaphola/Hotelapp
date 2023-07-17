@@ -141,8 +141,9 @@ const onUpdateSubmit=(e)=>{
 
                                         </div>
                                     </div>
-                                    <div className="col-md-6 col-lg-5 d-block d-md-block">
-                                        <table className="table table-success table-hover table-responsive">
+                                    <div className="col-md-6 col-lg-5 d-block d-md-block table-wrapper-scroll-y my-custom-scrollbar">
+                                        <h3 style={{margin:'5px'}}>Bookings</h3>
+                                        <table className="table table-success table-hover table-responsive table table-bordered table-striped mb-0">
                                             <thead>
                                                 <tr>
                                                     <th scope="col">Client Name</th>
