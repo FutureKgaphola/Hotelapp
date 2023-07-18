@@ -10,6 +10,7 @@ import {
     addDoc, collection, onSnapshot, doc, setDoc
 } from 'firebase/firestore';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { UserRouteProtector } from "../Routeprotector/Protector";
 
 const { RangePicker } = DatePicker;
 const RoomPreview = () => {
@@ -36,8 +37,9 @@ const RoomPreview = () => {
         }
 
     }
-
+   
     useEffect(() => {
+        UserRouteProtector(); 
         const colRef = doc(db, "Rooms", _id);
         onSnapshot(colRef, (snapshot) => {
             try {

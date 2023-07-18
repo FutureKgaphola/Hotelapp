@@ -75,14 +75,13 @@ const NavBar = () => {
                 }
                 
             }
-        })
+        });
 
     }, []);
 
     var goHome=()=>{
         navigate('/');
     }
-
 
     return (
         <div className="row" style={{ height: '10%',backgroundColor:'whitesmoke' }}>

@@ -12,6 +12,7 @@ import Bookings from './components/Bookings';
 import Update from './components/Update';
 import RoomPreview from './components/RoomPreview';
 import Profile from './components/Profile';
+import Unathorised from './components/Unathorised';
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +24,7 @@ const router=createBrowserRouter(
       <Route exact path='Update/:_id' element={<Update/>}/>
       <Route exact path='RoomsPreview/:_id/:Authid' element={<RoomPreview/>}/>
       <Route exact path='Profile/:_id' element={<Profile/>}/>
+      <Route exact path='Unathorised' element={<Unathorised/>}/>
       <Route exact path='*' element={<Comp404/>}/>
     </Route>
   )

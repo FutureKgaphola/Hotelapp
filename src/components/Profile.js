@@ -7,6 +7,7 @@ import companyimage from '../media/hotel.png';
 import { useEffect, useState } from "react";
 import {collection,onSnapshot,doc,setDoc} from 'firebase/firestore';
 import { db } from "../Dbconfig/db";
+import { UserRouteProtector } from "../Routeprotector/Protector";
 
 const Profile = () => {
 
@@ -20,6 +21,7 @@ const Profile = () => {
     });
 
 useEffect(() => {
+    UserRouteProtector();
     var colRef= collection(db,"Reservations");
     let reservations = [];
     onSnapshot(colRef,(snapshot)=>{

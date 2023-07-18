@@ -13,6 +13,7 @@ import LoginDialog from './LoginDialog';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getStorage, ref, deleteObject, getDownloadURL, uploadBytes } from "firebase/storage";
 import { v4 } from 'uuid';
+import { AdminRouteProtector } from '../Routeprotector/Protector';
 
 const Update = () => {
     const navigate = useNavigate();
@@ -36,6 +37,7 @@ const Update = () => {
     }
 
     useEffect(() => {
+        AdminRouteProtector();
         const colRef = doc(db, "Rooms", _id);
         onSnapshot(colRef, (snapshot) => {
             try {

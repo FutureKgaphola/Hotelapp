@@ -10,8 +10,7 @@ const LoginDialog = () => {
     var [email, setEmail] = useState('');
 
     var submitfields = (event) => {
-        event.preventDefault();
-        
+        event.preventDefault();   
     }
 
     var getForgotpass = () => {

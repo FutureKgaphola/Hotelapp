@@ -9,6 +9,7 @@ import {collection,onSnapshot
 import { db } from '../Dbconfig/db';
 import AddRoomLDialog from "./AddRoomDialog";
 import { useNavigate } from "react-router-dom";
+import { AdminRouteProtector } from "../Routeprotector/Protector";
 
 
 const Bookings = () => {
@@ -30,6 +31,8 @@ const Bookings = () => {
     }
 
     useEffect(() => {
+        AdminRouteProtector();
+
         let max=0;
         const colRef = collection(db, "Rooms");
         onSnapshot(colRef, (snapshot) => {
